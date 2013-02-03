@@ -42,7 +42,48 @@ import java.awt.Color;
  * @author yulli
  */
 public class EyeInThePi {
+    
+    public static final String NAME = "DaisyCV Target Tracker";
+    private WPIColor targetColor = new WPIColor(0, 255, 0);
 
+    // Constants that need to be tuned
+    private static final double kNearlyHorizontalSlope = Math.tan(Math.toRadians(14));
+    private static final double kNearlyVerticalSlope = Math.tan(Math.toRadians(90-15));
+    private static final int kMinWidth = 20;
+    private static final int kMaxWidth = 200;
+    private static final double kRangeOffset = 0.0;
+    private static final int kHoleClosingIterations = 10;
+
+    private static final double kShooterOffsetDeg = -1.55;
+    private static final double kHorizontalFOVDeg = 47.0;
+
+    private static final double kVerticalFOVDeg = 480.0/640.0*kHorizontalFOVDeg;
+    private static final double kCameraHeightIn = 54.0;
+    private static final double kCameraPitchDeg = 21.0;
+    private static final double kTopTargetHeightIn = 98.0 + 2.0 + 9.0; // 98 to rim, +2 to bottom of target, +9 to center of target
+
+    private TreeMap<Double, Double> rangeTable;
+
+    private static boolean m_debugMode = true;
+
+    // Store JavaCV temporaries as members to reduce memory management during processing
+    private CvSize size = null;
+    private WPIContour[] contours;
+    private ArrayList<WPIPolygon> polygons;
+    private IplConvKernel morphKernel;
+    private IplImage bin;
+    private IplImage hsv;
+    private IplImage hue;
+    private IplImage sat;
+    private IplImage upper;
+    private IplImage lower;
+    private IplImage combined;
+    private IplImage lightness;
+    private IplImage logFiltered;
+    private WPIPoint linePt1;
+    private WPIPoint linePt2;
+    private int horizontalOffsetPixels;
+    
     /**
      * @param args the command line arguments
      */
