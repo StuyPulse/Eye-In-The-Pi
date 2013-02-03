@@ -148,7 +148,6 @@ public class EyeInThePi {
         return 5234.0+kRangeOffset;
     }
     
-    @Override
     public WPIImage processImage(WPIColorImage rawImage)
     {
         double heading = 0.0;
