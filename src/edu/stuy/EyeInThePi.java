@@ -482,8 +482,8 @@ public class EyeInThePi {
 
         
         //new DashboardFrame(!m_debugMode); //Call the constructor for DashboardFrame, because FIRST is stupid.
-        // Create the widget
-        //DaisyCVWidget widget = new DaisyCVWidget(true);
+        // Create the PiEye
+        EyeInThePi pieye = new EyeInThePi(true);
 
         long totalTime = 0;
         for (int i = 0; i < args.length; i++)
@@ -509,7 +509,7 @@ public class EyeInThePi {
             // Process image
             long startTime, endTime;
             startTime = System.nanoTime();
-            resultImage = widget.processImage(rawImage);
+            resultImage = pieye.processImage(rawImage);
             endTime = System.nanoTime();
 
             // Display results
