@@ -1,44 +1,7 @@
-*.py[cod]
-
-# C extensions
-*.so
-
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-
-# Installer logs
-pip-log.txt
-
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
-
-# Translations
-*.mo
-
-# MrDeveloper
-.mr.developer.cfg
-.project
-.pydevproject
-
-# Others
-log
-tmp
-db/*.sqlite3
+*.class
+.*.swp
+j2meclasses/
+build/
+suite/
 nbproject/private
-.DS_Store
-.pydevproject
-.rvmrc
+nbproject/project.bak.xml
