@@ -102,24 +102,24 @@ public class EyeInThePi {
 
         }
 
-        rangeTable = new TreeMap<Double,Double>();
-        rangeTable.put(110.0, 3800.0+kRangeOffset);
-        rangeTable.put(120.0, 3900.0+kRangeOffset);
-        rangeTable.put(130.0, 4000.0+kRangeOffset);
-        rangeTable.put(140.0, 3434.0+kRangeOffset);
-        rangeTable.put(150.0, 3499.0+kRangeOffset);
-        rangeTable.put(160.0, 3544.0+kRangeOffset);
-        rangeTable.put(170.0, 3574.0+kRangeOffset);
-        rangeTable.put(180.0, 3609.0+kRangeOffset);
-        rangeTable.put(190.0, 3664.0+kRangeOffset);
-        rangeTable.put(200.0, 3854.0+kRangeOffset);
-        rangeTable.put(210.0, 4034.0+kRangeOffset);
-        rangeTable.put(220.0, 4284.0+kRangeOffset);
-        rangeTable.put(230.0, 4434.0+kRangeOffset);
-        rangeTable.put(240.0, 4584.0+kRangeOffset);
-        rangeTable.put(250.0, 4794.0+kRangeOffset);
-        rangeTable.put(260.0, 5034.0+kRangeOffset);
-        rangeTable.put(270.0, 5234.0+kRangeOffset);
+//        rangeTable = new TreeMap<Double,Double>();
+//        rangeTable.put(110.0, 3800.0+kRangeOffset);
+//        rangeTable.put(120.0, 3900.0+kRangeOffset);
+//        rangeTable.put(130.0, 4000.0+kRangeOffset);
+//        rangeTable.put(140.0, 3434.0+kRangeOffset);
+//        rangeTable.put(150.0, 3499.0+kRangeOffset);
+//        rangeTable.put(160.0, 3544.0+kRangeOffset);
+//        rangeTable.put(170.0, 3574.0+kRangeOffset);
+//        rangeTable.put(180.0, 3609.0+kRangeOffset);
+//        rangeTable.put(190.0, 3664.0+kRangeOffset);
+//        rangeTable.put(200.0, 3854.0+kRangeOffset);
+//        rangeTable.put(210.0, 4034.0+kRangeOffset);
+//        rangeTable.put(220.0, 4284.0+kRangeOffset);
+//        rangeTable.put(230.0, 4434.0+kRangeOffset);
+//        rangeTable.put(240.0, 4584.0+kRangeOffset);
+//        rangeTable.put(250.0, 4794.0+kRangeOffset);
+//        rangeTable.put(260.0, 5034.0+kRangeOffset);
+//        rangeTable.put(270.0, 5234.0+kRangeOffset);
 
         DaisyExtensions.init();
     }
