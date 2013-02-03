@@ -138,8 +138,9 @@ public class EyeInThePi {
                     double m = (range-lowKey)/(key-lowKey);
                     return lowVal+m*(highVal-lowVal);
                 }
-                else
+                else {
                     return highVal;
+                }
             }
             lowKey = key;
             lowVal = rangeTable.get(key);
@@ -343,13 +344,16 @@ public class EyeInThePi {
                     double dy = points[i].getY() - points[(i+1) % 4].getY();
                     double dx = points[i].getX() - points[(i+1) % 4].getX();
                     double slope = Double.MAX_VALUE;
-                    if( dx != 0 )
+                    if( dx != 0 ) {
                         slope = Math.abs(dy/dx);
+                    }
 
-                    if( slope < kNearlyHorizontalSlope )
+                    if( slope < kNearlyHorizontalSlope ) {
                         ++numNearlyHorizontal;
-                    else if( slope > kNearlyVerticalSlope )
+                    }
+                    else if( slope > kNearlyVerticalSlope ) {
                         ++numNearlyVertical;
+                    }
                 }
 
                 if(numNearlyHorizontal >= 1 && numNearlyVertical == 2)
@@ -426,28 +430,39 @@ public class EyeInThePi {
         //Choose a frame to show in the SmartDashboard
         if (!m_debugMode) {
             String modeChoice = Robot.getTable().getString("mode");
-                if (modeChoice.equals("result"))
-                    return rawImage;
-                if (modeChoice.equals( "bin"))
-                    return new PulseColorImage(bin.getBufferedImage());
-                if (modeChoice.equals( "input"))
-                    return new PulseColorImage(input.getBufferedImage());
-                if (modeChoice.equals( "log"))
-                    return new PulseColorImage(logFiltered.getBufferedImage());
-                if (modeChoice.equals( "hsv"))
-                    return new PulseColorImage(hsv.getBufferedImage());
-                if (modeChoice.equals( "hue"))
-                    return new PulseColorImage(hue.getBufferedImage());
-                if (modeChoice.equals( "combined"))
-                    return new PulseColorImage(combined.getBufferedImage());
-                if (modeChoice.equals( "upper"))
-                    return new PulseColorImage(upper.getBufferedImage());
-                if (modeChoice.equals( "lower"))
-                    return new PulseColorImage(lower.getBufferedImage());
-                if (modeChoice.equals( "sat"))
-                    return new PulseColorImage(sat.getBufferedImage());
-                if (modeChoice.equals( "lightness"))
-                    return new PulseColorImage(lightness.getBufferedImage());
+            if (modeChoice.equals("result")) {
+                return rawImage;
+            }
+            if (modeChoice.equals("bin")) {
+                return new PulseColorImage(bin.getBufferedImage());
+            }
+            if (modeChoice.equals("input")) {
+                return new PulseColorImage(input.getBufferedImage());
+            }
+            if (modeChoice.equals("log")) {
+                return new PulseColorImage(logFiltered.getBufferedImage());
+            }
+            if (modeChoice.equals("hsv")) {
+                return new PulseColorImage(hsv.getBufferedImage());
+            }
+            if (modeChoice.equals("hue")) {
+                return new PulseColorImage(hue.getBufferedImage());
+            }
+            if (modeChoice.equals("combined")) {
+                return new PulseColorImage(combined.getBufferedImage());
+            }
+            if (modeChoice.equals("upper")) {
+                return new PulseColorImage(upper.getBufferedImage());
+            }
+            if (modeChoice.equals("lower")) {
+                return new PulseColorImage(lower.getBufferedImage());
+            }
+            if (modeChoice.equals("sat")) {
+                return new PulseColorImage(sat.getBufferedImage());
+            }
+            if (modeChoice.equals("lightness")) {
+                return new PulseColorImage(lightness.getBufferedImage());
+            }
         }
         return rawImage;
     }
