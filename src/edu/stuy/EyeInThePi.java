@@ -483,7 +483,7 @@ public class EyeInThePi {
         
         //new DashboardFrame(!m_debugMode); //Call the constructor for DashboardFrame, because FIRST is stupid.
         // Create the widget
-        DaisyCVWidget widget = new DaisyCVWidget(true);
+        //DaisyCVWidget widget = new DaisyCVWidget(true);
 
         long totalTime = 0;
         for (int i = 0; i < args.length; i++)
