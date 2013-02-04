@@ -91,36 +91,13 @@ public class EyeInThePi {
         m_debugMode = debug;
         morphKernel = IplConvKernel.create(3, 3, 1, 1, opencv_imgproc.CV_SHAPE_RECT, null);
 
-        // Put the mode String in the SmartDashboard.
-        if (!m_debugMode) {
-            Robot.getTable().putString("mode", "result");
-            Robot.getTable().putInt("target", 100);
-            Robot.getTable().putInt("variance", 10);
-
-        }
-
         DaisyExtensions.init();
     }
     
     public WPIImage processImage(WPIColorImage rawImage)
     {
-        double heading = 0.0;
+        double heading = 0.0; //TODO: Get this from the robot.
         
-        // Get the current heading of the robot first
-        if( !m_debugMode )
-        {
-            try
-            {
-                heading = Robot.getTable().getDouble("Heading");
-            }
-            catch( NoSuchElementException e)
-            {
-            }
-            catch( IllegalArgumentException e )
-            {
-            }
-        }
-
         if( size == null || size.width() != rawImage.getWidth() || size.height() != rawImage.getHeight() )
         {
             size = opencv_core.cvSize(rawImage.getWidth(),rawImage.getHeight());
@@ -156,7 +133,6 @@ public class EyeInThePi {
                 r.setPixel(i, j, rgb);
             }
         }
-        //System.out.println(r);
 
         BufferedImage bufferedImage = new BufferedImage(rawImage.getBufferedImage().getWidth(), rawImage.getBufferedImage().getHeight(), BufferedImage.TYPE_INT_RGB);
         bufferedImage.setData(r);
@@ -164,11 +140,6 @@ public class EyeInThePi {
         logFiltered = IplImage.createFrom(bufferedImage);
         logFiltered = logFiltered.nChannels(1);
         PulseImage logImage = new PulseImage(logFiltered);
-
-        if (m_debugMode) {
-            CanvasFrame logImageFrame = new CanvasFrame("Log Image");
-            logImageFrame.showImage(logImage.getBufferedImage());
-        }
 
         // Get the raw IplImages for OpenCV
         IplImage input = DaisyExtensions.getIplImage(rawImage);
@@ -184,10 +155,7 @@ public class EyeInThePi {
         // a thresh and inverted thresh in order to get points that are red
         int targetValue = 30;
         int variance = 2;
-        if (!m_debugMode) {
-            targetValue = Robot.getTable().getInt("target");
-            variance = Robot.getTable().getInt("variance");
-        }
+        
         opencv_imgproc.cvThreshold(hue, upper, targetValue-variance, 255, opencv_imgproc.CV_THRESH_BINARY);
         opencv_imgproc.cvThreshold(hue, lower, targetValue+variance, 255, opencv_imgproc.CV_THRESH_BINARY_INV);
 
@@ -197,14 +165,6 @@ public class EyeInThePi {
 
         //opencv_core.cvNot(bin, bin);
         //opencv_core.cvNot(hue, hue);
-
-        if (m_debugMode) {
-            CanvasFrame postNotBin = new CanvasFrame("PostNotBin");
-            postNotBin.showImage(bin.getBufferedImage());
-
-            CanvasFrame postNotHue = new CanvasFrame("PostNotHue");
-            postNotHue.showImage(hue.getBufferedImage());
-        }
 
         // Saturation
         opencv_imgproc.cvThreshold(sat, sat, 250, 255, opencv_imgproc.CV_THRESH_BINARY);
@@ -218,41 +178,13 @@ public class EyeInThePi {
         
         opencv_core.cvCopy(combined, bin);
 
-        if (m_debugMode) {
-            CanvasFrame asdf = new CanvasFrame("prepostbinthing");
-            asdf.showImage(bin.getBufferedImage());
-        }
-
         opencv_core.cvOr(logFiltered, bin, bin, null);
         opencv_core.cvOr(bin, sat, bin, null);
         opencv_core.cvAnd(bin, lightness, bin, null);
 
-        if (m_debugMode) {
-            CanvasFrame hsvas = new CanvasFrame("hsv");
-            hsvas.showImage(hsv.getBufferedImage());
-
-            CanvasFrame hueas = new CanvasFrame("hue");
-            hueas.showImage(hue.getBufferedImage());
-
-            CanvasFrame satas = new CanvasFrame("sat");
-            satas.showImage(sat.getBufferedImage());
-
-            CanvasFrame valas = new CanvasFrame("lightness");
-            valas.showImage(lightness.getBufferedImage());
-
-            CanvasFrame result = new CanvasFrame("binary");
-            result.showImage(bin.getBufferedImage());
-
-        }
 
         // Fill in any gaps using binary morphology
         opencv_imgproc.cvMorphologyEx(bin, bin, null, morphKernel, opencv_imgproc.CV_MOP_CLOSE, kHoleClosingIterations);
-
-        // Uncomment the next two lines to see the image post-morphology
-        if (m_debugMode) {
-            CanvasFrame result2 = new CanvasFrame("morph");
-            result2.showImage(bin.getBufferedImage());
-        }
 
         // Find contours
         WPIBinaryImage binWpi = DaisyExtensions.makeWPIBinaryImage(bin);
@@ -340,80 +272,16 @@ public class EyeInThePi {
             double azimuth = this.boundAngle0to360Degrees(x*kHorizontalFOVDeg/2.0 + heading - kShooterOffsetDeg);
             double range = (kTopTargetHeightIn-kCameraHeightIn)/Math.tan((y*kVerticalFOVDeg/2.0 + kCameraPitchDeg)*Math.PI/180.0);
 
-            if (!m_debugMode)
-            {
-                Robot.getTable().beginTransaction();
-                Robot.getTable().putBoolean("found", true);
-                Robot.getTable().putDouble("azimuth", azimuth);
-                Robot.getTable().getString("mode");
-                Robot.getTable().endTransaction();
-            } else
-            {
-                System.out.println("Target found");
-                System.out.println("x: " + x);
-                System.out.println("y: " + y);
-                System.out.println("azimuth: " + azimuth);
-                System.out.println("range: " + range);
-                System.out.println("height: " + square.getHeight());
-                System.out.println("width: " + square.getWidth());
-            }
             rawImage.drawPolygon(square, targetColor, 7);
-        } else
-        {
-
-            if (!m_debugMode)
-            {
-                Robot.getTable().putBoolean("found", false);
-            } else
-            {
-                System.out.println("Target not found");
-            }
-        }
-
+        } 
+        
         // Draw a crosshair
         rawImage.drawLine(linePt1, linePt2, targetColor, 2);
 
         DaisyExtensions.releaseMemory();
 
         //System.gc();
-
-        //Choose a frame to show in the SmartDashboard
-        if (!m_debugMode) {
-            String modeChoice = Robot.getTable().getString("mode");
-            if (modeChoice.equals("result")) {
-                return rawImage;
-            }
-            if (modeChoice.equals("bin")) {
-                return new PulseColorImage(bin.getBufferedImage());
-            }
-            if (modeChoice.equals("input")) {
-                return new PulseColorImage(input.getBufferedImage());
-            }
-            if (modeChoice.equals("log")) {
-                return new PulseColorImage(logFiltered.getBufferedImage());
-            }
-            if (modeChoice.equals("hsv")) {
-                return new PulseColorImage(hsv.getBufferedImage());
-            }
-            if (modeChoice.equals("hue")) {
-                return new PulseColorImage(hue.getBufferedImage());
-            }
-            if (modeChoice.equals("combined")) {
-                return new PulseColorImage(combined.getBufferedImage());
-            }
-            if (modeChoice.equals("upper")) {
-                return new PulseColorImage(upper.getBufferedImage());
-            }
-            if (modeChoice.equals("lower")) {
-                return new PulseColorImage(lower.getBufferedImage());
-            }
-            if (modeChoice.equals("sat")) {
-                return new PulseColorImage(sat.getBufferedImage());
-            }
-            if (modeChoice.equals("lightness")) {
-                return new PulseColorImage(lightness.getBufferedImage());
-            }
-        }
+        
         return rawImage;
     }
     
