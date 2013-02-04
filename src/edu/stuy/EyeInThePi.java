@@ -20,9 +20,7 @@ import edu.wpi.first.wpijavacv.WPIPolygon;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.TreeMap;
 import javax.imageio.ImageIO;
 
 
