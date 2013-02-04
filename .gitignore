@@ -3,6 +3,7 @@
 j2meclasses/
 build/
 suite/
+dist/
 nbproject/private
 nbproject/project.bak.xml
 lib/
