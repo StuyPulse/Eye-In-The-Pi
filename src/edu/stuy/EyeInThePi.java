@@ -28,10 +28,6 @@ import java.util.Scanner;
 import java.util.TreeMap;
 import javax.imageio.ImageIO;
 
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
 
 /* Much of this code is based on Team 341's DaisyCV code.
  * This is an implementation of their vision code using OpenCV on a Rasberry Pi.
@@ -73,8 +69,6 @@ public class EyeInThePi {
     private IplImage hsv;
     private IplImage hue;
     private IplImage sat;
-    private IplImage upper;
-    private IplImage lower;
     private IplImage combined;
     private IplImage lightness;
     private IplImage logFiltered;
@@ -105,8 +99,6 @@ public class EyeInThePi {
             bin = IplImage.create(size, 8, 1);
             hsv = IplImage.create(size, 8, 3);
             hue = IplImage.create(size, 8, 1);
-            upper = IplImage.create(size, 8, 1);
-            lower = IplImage.create(size, 8, 1);
             combined = IplImage.create(size, 8, 1);
             sat = IplImage.create(size, 8, 1);
             lightness = IplImage.create(size, 8, 1);
@@ -143,6 +135,8 @@ public class EyeInThePi {
         // Copy the combined hue image into bin
         opencv_core.cvCopy(combined, bin);
 
+        
+        // Combine images with bitwise operations
         opencv_core.cvOr(logFiltered, bin, bin, null);
         opencv_core.cvOr(bin, sat, bin, null);
         opencv_core.cvAnd(bin, lightness, bin, null);
