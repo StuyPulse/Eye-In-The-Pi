@@ -43,7 +43,6 @@ import java.awt.Color;
  */
 public class EyeInThePi {
     
-    public static final String NAME = "DaisyCV Target Tracker";
     private WPIColor targetColor = new WPIColor(0, 255, 0);
 
     // Constants that need to be tuned
@@ -61,8 +60,6 @@ public class EyeInThePi {
     private static final double kCameraHeightIn = 54.0;
     private static final double kCameraPitchDeg = 21.0;
     private static final double kTopTargetHeightIn = 98.0 + 2.0 + 9.0; // 98 to rim, +2 to bottom of target, +9 to center of target
-
-    private TreeMap<Double, Double> rangeTable;
 
     private static boolean m_debugMode = true;
 
@@ -102,51 +99,7 @@ public class EyeInThePi {
 
         }
 
-//        rangeTable = new TreeMap<Double,Double>();
-//        rangeTable.put(110.0, 3800.0+kRangeOffset);
-//        rangeTable.put(120.0, 3900.0+kRangeOffset);
-//        rangeTable.put(130.0, 4000.0+kRangeOffset);
-//        rangeTable.put(140.0, 3434.0+kRangeOffset);
-//        rangeTable.put(150.0, 3499.0+kRangeOffset);
-//        rangeTable.put(160.0, 3544.0+kRangeOffset);
-//        rangeTable.put(170.0, 3574.0+kRangeOffset);
-//        rangeTable.put(180.0, 3609.0+kRangeOffset);
-//        rangeTable.put(190.0, 3664.0+kRangeOffset);
-//        rangeTable.put(200.0, 3854.0+kRangeOffset);
-//        rangeTable.put(210.0, 4034.0+kRangeOffset);
-//        rangeTable.put(220.0, 4284.0+kRangeOffset);
-//        rangeTable.put(230.0, 4434.0+kRangeOffset);
-//        rangeTable.put(240.0, 4584.0+kRangeOffset);
-//        rangeTable.put(250.0, 4794.0+kRangeOffset);
-//        rangeTable.put(260.0, 5034.0+kRangeOffset);
-//        rangeTable.put(270.0, 5234.0+kRangeOffset);
-
         DaisyExtensions.init();
-    }
-    
-    public double getRPMsForRange(double range)
-    {
-        double lowKey = -1.0;
-        double lowVal = -1.0;
-        for( double key : rangeTable.keySet() )
-        {
-            if( range < key )
-            {
-                double highVal = rangeTable.get(key);
-                if( lowKey > 0.0 )
-                {
-                    double m = (range-lowKey)/(key-lowKey);
-                    return lowVal+m*(highVal-lowVal);
-                }
-                else {
-                    return highVal;
-                }
-            }
-            lowKey = key;
-            lowVal = rangeTable.get(key);
-        }
-
-        return 5234.0+kRangeOffset;
     }
     
     public WPIImage processImage(WPIColorImage rawImage)
@@ -386,14 +339,12 @@ public class EyeInThePi {
 
             double azimuth = this.boundAngle0to360Degrees(x*kHorizontalFOVDeg/2.0 + heading - kShooterOffsetDeg);
             double range = (kTopTargetHeightIn-kCameraHeightIn)/Math.tan((y*kVerticalFOVDeg/2.0 + kCameraPitchDeg)*Math.PI/180.0);
-            double rpms = getRPMsForRange(range);
 
             if (!m_debugMode)
             {
                 Robot.getTable().beginTransaction();
                 Robot.getTable().putBoolean("found", true);
                 Robot.getTable().putDouble("azimuth", azimuth);
-                Robot.getTable().putDouble("rpms", rpms);
                 Robot.getTable().getString("mode");
                 Robot.getTable().endTransaction();
             } else
@@ -403,7 +354,6 @@ public class EyeInThePi {
                 System.out.println("y: " + y);
                 System.out.println("azimuth: " + azimuth);
                 System.out.println("range: " + range);
-                System.out.println("rpms: " + rpms);
                 System.out.println("height: " + square.getHeight());
                 System.out.println("width: " + square.getWidth());
             }
