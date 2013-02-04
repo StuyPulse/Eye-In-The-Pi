@@ -46,6 +46,7 @@ public class EyeInThePi {
     private WPIColor targetColor = new WPIColor(0, 255, 0);
 
     // Constants that need to be tuned
+    // TODO: Tune them.
     private static final double kNearlyHorizontalSlope = Math.tan(Math.toRadians(14));
     private static final double kNearlyVerticalSlope = Math.tan(Math.toRadians(90-15));
     private static final int kMinWidth = 20;
@@ -172,10 +173,7 @@ public class EyeInThePi {
         // Value
         opencv_imgproc.cvThreshold(lightness, lightness, 150, 255, opencv_imgproc.CV_THRESH_BINARY);
 
-        // Combine the results to obtain our binary image which should for the most
-        // part only contain pixels that we care about
-        //opencv_core.cvAnd(upper, lower, bin, null);
-        
+        // Copy the combined hue image into bin
         opencv_core.cvCopy(combined, bin);
 
         opencv_core.cvOr(logFiltered, bin, bin, null);
@@ -213,7 +211,6 @@ public class EyeInThePi {
 
         for (WPIPolygon p : polygons)
         {
-            //System.out.println("Convex: " + p.isConvex() + " Verts: " + p.getNumVertices()); 
             if (p.isConvex() && p.getNumVertices() == 4)
             {
 
