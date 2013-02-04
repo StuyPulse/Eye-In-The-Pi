@@ -41,7 +41,6 @@ public class EyeInThePi {
     private static final double kNearlyVerticalSlope = Math.tan(Math.toRadians(90-15));
     private static final int kMinWidth = 20;
     private static final int kMaxWidth = 200;
-    private static final double kRangeOffset = 0.0;
     private static final int kHoleClosingIterations = 10;
 
     private static final double kShooterOffsetDeg = -1.55;
