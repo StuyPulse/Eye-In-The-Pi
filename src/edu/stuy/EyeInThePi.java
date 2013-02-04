@@ -115,36 +115,14 @@ public class EyeInThePi {
             linePt1 = new WPIPoint(size.width()/2+horizontalOffsetPixels,size.height()-1);
             linePt2 = new WPIPoint(size.width()/2+horizontalOffsetPixels,0);
         }
-
-        WritableRaster r = (WritableRaster) rawImage.getBufferedImage().getData(); //We need this to write to/from an image
-
-        for (int i = 0; i < r.getWidth(); i++) {
-            for (int j = 0; j < r.getHeight(); j++) {
-                int[] pixel = new int[3];
-                pixel = r.getPixel(i, j, pixel); //get our pixel
-                float[] hsb = new float[3];
-                Color.RGBtoHSB(pixel[0], pixel[1], pixel[2], hsb); //Convert to HSB
-                hsb[2] *= 255;
-                hsb[2] -= (float) Math.log(hsb[2] - 255); // put the image through a funky logarithmic filter, to make brights brighter and darks darker.
-                hsb[2] /= 255;
-                float[] rgb = Color.getHSBColor(hsb[0], hsb[1], hsb[2]).getRGBColorComponents(null); 
-                rgb[0] *= 255;
-                rgb[1] *= 255;
-                rgb[2] *= 225;
-                r.setPixel(i, j, rgb);
-            }
-        }
-
-        BufferedImage bufferedImage = new BufferedImage(rawImage.getBufferedImage().getWidth(), rawImage.getBufferedImage().getHeight(), BufferedImage.TYPE_INT_RGB);
-        bufferedImage.setData(r);
-
-        logFiltered = IplImage.createFrom(bufferedImage);
-        logFiltered = logFiltered.nChannels(1);
-        PulseImage logImage = new PulseImage(logFiltered);
+        
 
         // Get the raw IplImages for OpenCV
         IplImage input = DaisyExtensions.getIplImage(rawImage);
 
+        logFiltered = ImageFilters.logFilter(input);
+
+        PulseImage logImage = new PulseImage(logFiltered);
 
         // Convert to HSV color space
         opencv_imgproc.cvCvtColor(input, hsv, opencv_imgproc.CV_BGR2HLS);
