@@ -4,7 +4,6 @@
  */
 package edu.stuy;
 
-import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_core.*;
 import com.googlecode.javacv.cpp.opencv_imgproc;
@@ -283,11 +282,6 @@ public class EyeInThePi {
                 System.err.println("Could not find file!");
                 return;
             }
-            
-            //shows the raw image before processing to eliminate the possibility
-            //that both may be the modified image.
-            CanvasFrame original = new CanvasFrame("Raw");
-            original.showImage(rawImage.getBufferedImage());
 
             WPIImage resultImage = null;
 
@@ -302,9 +296,6 @@ public class EyeInThePi {
             double milliseconds = (double) (endTime - startTime) / 1000000.0;
             System.out.format("Processing took %.2f milliseconds%n", milliseconds);
             System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
-            
-            CanvasFrame result = new CanvasFrame("Result");
-            result.showImage(resultImage.getBufferedImage());
 
             System.out.println("Waiting for ENTER to continue to next image or exit...");
             Scanner console = new Scanner(System.in);
