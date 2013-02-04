@@ -43,7 +43,6 @@ import java.awt.Color;
  */
 public class EyeInThePi {
     
-    public static final String NAME = "DaisyCV Target Tracker";
     private WPIColor targetColor = new WPIColor(0, 255, 0);
 
     // Constants that need to be tuned
