@@ -62,8 +62,6 @@ public class EyeInThePi {
     private static final double kCameraPitchDeg = 21.0;
     private static final double kTopTargetHeightIn = 98.0 + 2.0 + 9.0; // 98 to rim, +2 to bottom of target, +9 to center of target
 
-    private TreeMap<Double, Double> rangeTable;
-
     private static boolean m_debugMode = true;
 
     // Store JavaCV temporaries as members to reduce memory management during processing
