@@ -1,6 +1,9 @@
 package edu.stuy;
 
+import com.googlecode.javacv.cpp.opencv_core;
+import com.googlecode.javacv.cpp.opencv_imgproc;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
+import com.googlecode.javacv.cpp.opencv_core.CvSize;
 
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
@@ -34,5 +37,23 @@ public class ImageFilters {
         IplImage logFiltered = IplImage.createFrom(bufferedImage);
         return logFiltered.nChannels(1);
         
+    }
+    
+    public static IplImage hueFilter (IplImage input) {
+        //We need a target hue to look at, and a range to look around it
+        int targetValue = 30;
+        int variance = 2;
+
+        CvSize size = opencv_core.cvSize(input.width(),input.width());
+        
+        IplImage upper = IplImage.create(size, 8, 1);
+        IplImage lower = IplImage.create(size, 8, 1);
+        IplImage combined = IplImage.create(size, 8, 1);
+
+        opencv_imgproc.cvThreshold(input, upper, targetValue-variance, 255, opencv_imgproc.CV_THRESH_BINARY);
+        opencv_imgproc.cvThreshold(input, lower, targetValue+variance, 255, opencv_imgproc.CV_THRESH_BINARY_INV);
+
+        opencv_core.cvAnd(upper, lower, combined, null);
+        return combined;
     }
 }

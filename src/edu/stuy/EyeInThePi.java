@@ -120,25 +120,14 @@ public class EyeInThePi {
         // Get the raw IplImages for OpenCV
         IplImage input = DaisyExtensions.getIplImage(rawImage);
 
-        logFiltered = ImageFilters.logFilter(input);
-
-        PulseImage logImage = new PulseImage(logFiltered);
 
         // Convert to HSV color space
         opencv_imgproc.cvCvtColor(input, hsv, opencv_imgproc.CV_BGR2HLS);
         opencv_core.cvSplit(hsv, hue, lightness, sat, null);
 
         // Threshold each component separately
-        // Hue
-        // NOTE: Red is at the end of the color space, so you need to OR together
-        // a thresh and inverted thresh in order to get points that are red
-        int targetValue = 30;
-        int variance = 2;
         
-        opencv_imgproc.cvThreshold(hue, upper, targetValue-variance, 255, opencv_imgproc.CV_THRESH_BINARY);
-        opencv_imgproc.cvThreshold(hue, lower, targetValue+variance, 255, opencv_imgproc.CV_THRESH_BINARY_INV);
-
-        opencv_core.cvAnd(upper, lower, combined, null);
+        combined = ImageFilters.hueFilter(hue);
 
         //opencv_core.cvNot(combined, combined);
 
