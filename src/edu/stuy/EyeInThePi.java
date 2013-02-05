@@ -91,6 +91,7 @@ public class EyeInThePi {
         if( size == null || size.width() != rawImage.getWidth() || size.height() != rawImage.getHeight() )
         {
             size = opencv_core.cvSize(rawImage.getWidth(),rawImage.getHeight());
+            ImageFilters.init(size); // Tell ImageFilters the size of the image it'll be working with.
             bin = IplImage.create(size, 8, 1);
             hsv = IplImage.create(size, 8, 3);
             hue = IplImage.create(size, 8, 1);
@@ -236,7 +237,8 @@ public class EyeInThePi {
             double degreesPerVerticalPixel = kVerticalFOVDeg / size.height();   // Find the number of degrees each pixel represents
             double verticalDegreesOff = squareCenterY * degreesPerVerticalPixel; // Find how far we are based on that
             
-            System.out.println("Off by " + verticalDegreesOff + " degrees.");
+            System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
+            System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
             
             rawImage.drawPolygon(square, targetColor, 7);
         } 

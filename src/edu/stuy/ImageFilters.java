@@ -11,6 +11,14 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 public class ImageFilters {
+    private static CvSize _size;
+
+
+
+    public static void init (CvSize size) {
+        _size = size;
+    }
+    
     public static IplImage logFilter (IplImage input) {
         WritableRaster r = (WritableRaster) input.getBufferedImage().getData(); //We need this to write to/from an image
 
@@ -43,12 +51,10 @@ public class ImageFilters {
         //We need a target hue to look at, and a range to look around it
         int targetValue = 30;
         int variance = 2;
-
-        CvSize size = opencv_core.cvSize(input.width(),input.width());
         
-        IplImage upper = IplImage.create(size, 8, 1);
-        IplImage lower = IplImage.create(size, 8, 1);
-        IplImage combined = IplImage.create(size, 8, 1);
+        IplImage upper = IplImage.create(_size, 8, 1);
+        IplImage lower = IplImage.create(_size, 8, 1);
+        IplImage combined = IplImage.create(_size, 8, 1);
 
         opencv_imgproc.cvThreshold(input, upper, targetValue-variance, 255, opencv_imgproc.CV_THRESH_BINARY);
         opencv_imgproc.cvThreshold(input, lower, targetValue+variance, 255, opencv_imgproc.CV_THRESH_BINARY_INV);
