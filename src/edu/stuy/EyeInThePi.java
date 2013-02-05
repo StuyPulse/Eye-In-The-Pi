@@ -45,8 +45,8 @@ public class EyeInThePi {
 
     private static final double kShooterOffsetDeg = -1.55;
     private static final double kHorizontalFOVDeg = 47.0;
-
-    private static final double kVerticalFOVDeg = 480.0/640.0*kHorizontalFOVDeg;
+    private static final double kVerticalFOVDeg = 48.0;
+    
     private static final double kCameraHeightIn = 54.0;
     private static final double kCameraPitchDeg = 21.0;
     private static final double kTopTargetHeightIn = 98.0 + 2.0 + 9.0; // 98 to rim, +2 to bottom of target, +9 to center of target
@@ -81,7 +81,9 @@ public class EyeInThePi {
 
         DaisyExtensions.init();
     }
-    
+    /* 
+     * Takes a raw image, processes it, finds rectangles, and sends data about the best fit to the robot.
+     */
     public WPIImage processImage(WPIColorImage rawImage)
     {
         double heading = 0.0; //TODO: Get this from the robot.
@@ -223,6 +225,19 @@ public class EyeInThePi {
             double azimuth = this.boundAngle0to360Degrees(x*kHorizontalFOVDeg/2.0 + heading - kShooterOffsetDeg);
             double range = (kTopTargetHeightIn-kCameraHeightIn)/Math.tan((y*kVerticalFOVDeg/2.0 + kCameraPitchDeg)*Math.PI/180.0);
 
+            // Get the coordinates of the center of the square
+            double squareCenterX = square.getX() + (square.getWidth() / 2);
+            double squareCenterY = square.getY() + (square.getWidth() / 2);
+
+            // Normalize them to be in a coordinate system with the center as (0,0)
+            squareCenterX -= (size.width() / 2);
+            squareCenterY -= (size.height() / 2);
+            
+            double degreesPerVerticalPixel = kVerticalFOVDeg / size.height();   // Find the number of degrees each pixel represents
+            double verticalDegreesOff = squareCenterY * degreesPerVerticalPixel; // Find how far we are based on that
+            
+            System.out.println("Off by " + verticalDegreesOff + " degrees.");
+            
             rawImage.drawPolygon(square, targetColor, 7);
         } 
         
