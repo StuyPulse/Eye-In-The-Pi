@@ -272,7 +272,7 @@ public class EyeInThePi {
         for (int i = 0; i < args.length; i++)
         {
             // Load the image
-            WPIColorImage rawImage = null;
+            WPIColorImage rawImage;
             try
             {
                 rawImage = new WPIColorImage(ImageIO.read(new File(args[i%args.length])));
@@ -282,7 +282,7 @@ public class EyeInThePi {
                 return;
             }
 
-            WPIImage resultImage = null;
+            WPIImage resultImage;
 
             // Process image
             long startTime, endTime;
