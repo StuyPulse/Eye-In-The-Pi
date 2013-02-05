@@ -299,17 +299,6 @@ public class EyeInThePi {
             System.out.println("Waiting for ENTER to continue to next image or exit...");
             Scanner console = new Scanner(System.in);
             console.nextLine();
-
-            if (original.isVisible())
-            {
-                original.setVisible(false);
-                original.dispose();
-            }
-            if (result.isVisible())
-            {
-                result.setVisible(false);
-                result.dispose();
-            }
         }
 
         double milliseconds = (double) (totalTime) / 1000000.0 / (args.length);
