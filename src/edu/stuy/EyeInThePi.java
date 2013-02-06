@@ -4,6 +4,7 @@
  */
 package edu.stuy;
 
+import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_core.*;
 import com.googlecode.javacv.cpp.opencv_imgproc;
@@ -235,7 +236,7 @@ public class EyeInThePi {
             squareCenterY -= (size.height() / 2);
             
             double degreesPerVerticalPixel = kVerticalFOVDeg / size.height();   // Find the number of degrees each pixel represents
-            double verticalDegreesOff = squareCenterY * degreesPerVerticalPixel; // Find how far we are based on that
+            double verticalDegreesOff = -1 * squareCenterY * degreesPerVerticalPixel; // Find how far we are based on that
             
             System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
             System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
@@ -274,53 +275,43 @@ public class EyeInThePi {
      */
     public static void main(String[] args)
     {
-        if (args.length == 0)
-        {
-            System.out.println("Usage: Arguments are paths to image files to test the program on");
-            return;
-        }
 
         
         //new DashboardFrame(!m_debugMode); //Call the constructor for DashboardFrame, because FIRST is stupid.
         // Create the PiEye
         EyeInThePi pieye = new EyeInThePi(true);
+        Camera cam = new Camera();
 
+        boolean running = true;
+        
         long totalTime = 0;
-        for (int i = 0; i < args.length; i++)
-        {
+        
+        while (running) {
             // Load the image
             WPIColorImage rawImage;
             try
             {
-                rawImage = new WPIColorImage(ImageIO.read(new File(args[i%args.length])));
-            } catch (IOException e)
-            {
-                System.err.println("Could not find file!");
-                return;
+                rawImage = cam.getFrame();//new WPIColorImage(ImageIO.read(new File(args[i%args.length])));
+                WPIImage resultImage;
+
+                // Process image
+                long startTime, endTime;
+                startTime = System.nanoTime();
+                resultImage = pieye.processImage(rawImage);
+                endTime = System.nanoTime();
+
+                
+                // Display results
+                totalTime += (endTime - startTime);
+                double milliseconds = (double) (endTime - startTime) / 1000000.0;
+                System.out.format("Processing took %.2f milliseconds%n", milliseconds);
+                System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
+
+            } catch (Exception e) {
+                System.out.println("Waiting for camera -- Give it a minute");
             }
-
-            WPIImage resultImage;
-
-            // Process image
-            long startTime, endTime;
-            startTime = System.nanoTime();
-            resultImage = pieye.processImage(rawImage);
-            endTime = System.nanoTime();
-
-            // Display results
-            totalTime += (endTime - startTime);
-            double milliseconds = (double) (endTime - startTime) / 1000000.0;
-            System.out.format("Processing took %.2f milliseconds%n", milliseconds);
-            System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
-
-            System.out.println("Waiting for ENTER to continue to next image or exit...");
-            Scanner console = new Scanner(System.in);
-            console.nextLine();
         }
 
-        double milliseconds = (double) (totalTime) / 1000000.0 / (args.length);
-        System.out.format("AVERAGE:%.2f milliseconds%n", milliseconds);
-        System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
         System.exit(0);
     }
 }
