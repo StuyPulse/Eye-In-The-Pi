@@ -17,6 +17,7 @@ import edu.wpi.first.wpijavacv.WPIContour;
 import edu.wpi.first.wpijavacv.WPIImage;
 import edu.wpi.first.wpijavacv.WPIPoint;
 import edu.wpi.first.wpijavacv.WPIPolygon;
+import edu.wpi.first.wpilibj.networking.NetworkTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -240,6 +241,8 @@ public class EyeInThePi {
             
             System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
             System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
+            NetworkTable table = NetworkTable.getTable("camera");
+            table.putDouble("dAngle", verticalDegreesOff);
             
             rawImage.drawPolygon(square, targetColor, 7);
         } 
@@ -275,6 +278,7 @@ public class EyeInThePi {
      */
     public static void main(String[] args)
     {
+        NetworkTable.setIPAddress("10.6.94.2");  // ip of crio
 
         
         //new DashboardFrame(!m_debugMode); //Call the constructor for DashboardFrame, because FIRST is stupid.
