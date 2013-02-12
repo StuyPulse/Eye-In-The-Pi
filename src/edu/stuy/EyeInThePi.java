@@ -17,7 +17,6 @@ import edu.wpi.first.wpijavacv.WPIContour;
 import edu.wpi.first.wpijavacv.WPIImage;
 import edu.wpi.first.wpijavacv.WPIPoint;
 import edu.wpi.first.wpijavacv.WPIPolygon;
-import edu.wpi.first.wpilibj.networking.NetworkTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +35,7 @@ import javax.imageio.ImageIO;
 public class EyeInThePi {
     
     private WPIColor targetColor = new WPIColor(0, 255, 0);
+    private static final NetworkIO network = new NetworkIO();
 
     // Constants that need to be tuned
     // TODO: Tune them.
@@ -81,7 +81,10 @@ public class EyeInThePi {
         m_debugMode = debug;
         morphKernel = IplConvKernel.create(3, 3, 1, 1, opencv_imgproc.CV_SHAPE_RECT, null);
 
+        //network = new NetworkIO();
+
         DaisyExtensions.init();
+        
     }
     /* 
      * Takes a raw image, processes it, finds rectangles, and sends data about the best fit to the robot.
@@ -159,7 +162,7 @@ public class EyeInThePi {
                 WPIPolygon p = c.approxPolygon(20);
                 if (p.isConvex() && p.getNumVertices() == 4)
                 {
-                    System.out.println("Ratio: " + ratio);
+                    //System.out.println("Ratio: " + ratio);
                 }
                 polygons.add(c.approxPolygon(20));
             }
@@ -239,10 +242,9 @@ public class EyeInThePi {
             double degreesPerVerticalPixel = kVerticalFOVDeg / size.height();   // Find the number of degrees each pixel represents
             double verticalDegreesOff = -1 * squareCenterY * degreesPerVerticalPixel; // Find how far we are based on that
             
-            System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
-            System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
-            NetworkTable table = NetworkTable.getTable("camera");
-            table.putDouble("dAngle", verticalDegreesOff);
+            //System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
+            //System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
+            network.setMostRecent(verticalDegreesOff);
             
             rawImage.drawPolygon(square, targetColor, 7);
         } 
@@ -278,13 +280,21 @@ public class EyeInThePi {
      */
     public static void main(String[] args)
     {
-        NetworkTable.setIPAddress("10.6.94.2");  // ip of crio
-
         
         //new DashboardFrame(!m_debugMode); //Call the constructor for DashboardFrame, because FIRST is stupid.
         // Create the PiEye
         EyeInThePi pieye = new EyeInThePi(true);
         Camera cam = new Camera();
+
+        Thread t = new Thread(
+                new Runnable () {
+                    public void run () {
+                        while (true) { 
+                            network.run();
+                        }
+                    }
+                });
+        t.start();
 
         boolean running = true;
         
@@ -308,11 +318,12 @@ public class EyeInThePi {
                 // Display results
                 totalTime += (endTime - startTime);
                 double milliseconds = (double) (endTime - startTime) / 1000000.0;
-                System.out.format("Processing took %.2f milliseconds%n", milliseconds);
-                System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
+                //System.out.format("Processing took %.2f milliseconds%n", milliseconds);
+                //System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
+            
 
             } catch (Exception e) {
-                System.out.println("Waiting for camera -- Give it a minute");
+                //System.out.println("Waiting for camera -- Give it a minute");
             }
         }
 
