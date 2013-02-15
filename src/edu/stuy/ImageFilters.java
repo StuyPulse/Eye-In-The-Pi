@@ -20,6 +20,7 @@ public class ImageFilters {
     }
     
     public static IplImage logFilter (IplImage input) {
+	long startTime = System.currentTimeMillis();
         WritableRaster r = (WritableRaster) input.getBufferedImage().getData(); //We need this to write to/from an image
 
         for (int i = 0; i < r.getWidth(); i++) {
@@ -43,6 +44,8 @@ public class ImageFilters {
         bufferedImage.setData(r);
 
         IplImage logFiltered = IplImage.createFrom(bufferedImage);
+	long endTime = System.currentTimeMillis();
+	System.out.println(endTime-startTime);
         return logFiltered.nChannels(1);
         
     }
