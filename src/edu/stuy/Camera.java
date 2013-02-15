@@ -8,22 +8,26 @@ import javax.imageio.ImageIO;
 import edu.wpi.first.wpijavacv.WPICamera;
 import edu.wpi.first.wpijavacv.WPIColorImage;
 
+import org.magnos.asset.Assets;
+
 /*
  * This class has the responsibility of talking to cameras.
  * A dignified position.
  */
 public class Camera {
     public static final String cameraIP = "10.6.94.12";
-    private WPICamera _cam;
+    public static final String imageURL = "/mjpg/video.mjpg";
+    //private WPICamera _cam;
     
     public Camera () {
-        _cam = new WPICamera(cameraIP);
+        //_cam = new WPICamera(cameraIP);
     }
     
 
     public WPIColorImage getFrame () {
         try {
-            return new WPIColorImage(_cam.getImage().getBufferedImage());
+            //return new WPIColorImage(_cam.getImage().getBufferedImage());
+            return new WPIColorImage((BufferedImage) Assets.load(cameraIP + imageURL));
         } catch (Exception e) {
             return null;
         }

@@ -318,12 +318,12 @@ public class EyeInThePi {
                 // Display results
                 totalTime += (endTime - startTime);
                 double milliseconds = (double) (endTime - startTime) / 1000000.0;
-                //System.out.format("Processing took %.2f milliseconds%n", milliseconds);
-                //System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
+                System.out.format("Processing took %.2f milliseconds%n", milliseconds);
+                System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
             
 
             } catch (Exception e) {
-                //System.out.println("Waiting for camera -- Give it a minute");
+                System.out.println("Waiting for camera -- Give it a minute");
             }
         }
 
