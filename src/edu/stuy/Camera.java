@@ -27,9 +27,10 @@ public class Camera {
     public WPIColorImage getFrame () {
         try {
             //return new WPIColorImage(_cam.getImage().getBufferedImage());
-            return new WPIColorImage((BufferedImage) Assets.load(cameraIP + imageURL));
+            return new WPIColorImage((BufferedImage) Assets.load("http://" + cameraIP + imageURL));
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            //return null;
         }
     }
     
