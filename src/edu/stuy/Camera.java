@@ -30,7 +30,7 @@ public class Camera {
             return new WPIColorImage((BufferedImage) Assets.load("http://" + cameraIP + imageURL));
         } catch (Exception e) {
             e.printStackTrace();
-            //return null;
+            return null;
         }
     }
     
