@@ -242,8 +242,8 @@ public class EyeInThePi {
             double degreesPerVerticalPixel = kVerticalFOVDeg / size.height();   // Find the number of degrees each pixel represents
             double verticalDegreesOff = -1 * squareCenterY * degreesPerVerticalPixel; // Find how far we are based on that
             
-            //System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
-            //System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
+            System.out.println("Center: (" + squareCenterX + ", " + squareCenterY + ")");
+            System.out.println("Off by " + Math.round(verticalDegreesOff) + " degrees.");
             network.setMostRecent(verticalDegreesOff);
             
             rawImage.drawPolygon(square, targetColor, 7);
@@ -306,24 +306,27 @@ public class EyeInThePi {
             try
             {
                 rawImage = cam.getFrame();//new WPIColorImage(ImageIO.read(new File(args[i%args.length])));
-                WPIImage resultImage;
+                if (rawImage != null) {
+                    WPIImage resultImage;
 
-                // Process image
-                long startTime, endTime;
-                startTime = System.nanoTime();
-                resultImage = pieye.processImage(rawImage);
-                endTime = System.nanoTime();
+                    // Process image
+                    long startTime, endTime;
+                    startTime = System.nanoTime();
+                    resultImage = pieye.processImage(rawImage);
+                    endTime = System.nanoTime();
 
+                    
+                    // Display results
+                    totalTime += (endTime - startTime);
+                    double milliseconds = (double) (endTime - startTime) / 1000000.0;
+                    System.out.format("Processing took %.2f milliseconds%n", milliseconds);
+                    System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
                 
-                // Display results
-                totalTime += (endTime - startTime);
-                double milliseconds = (double) (endTime - startTime) / 1000000.0;
-                System.out.format("Processing took %.2f milliseconds%n", milliseconds);
-                System.out.format("(%.2f frames per second)%n", 1000.0 / milliseconds);
-            
+                }
 
             } catch (Exception e) {
-                System.out.println("Waiting for camera -- Give it a minute");
+                e.printStackTrace();
+                //System.out.println("Waiting for camera -- Give it a minute");
             }
         }
 

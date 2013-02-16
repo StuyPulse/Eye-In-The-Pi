@@ -1,14 +1,21 @@
 package edu.stuy;
 
-import java.net.URL;
+import java.net.*;
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.util.Iterator;
+import java.io.StringWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.io.*;
+
+import javax.imageio.*;
+import javax.imageio.stream.*;
 
 import edu.wpi.first.wpijavacv.WPICamera;
 import edu.wpi.first.wpijavacv.WPIColorImage;
-
-import org.magnos.asset.Assets;
 
 /*
  * This class has the responsibility of talking to cameras.
@@ -16,22 +23,39 @@ import org.magnos.asset.Assets;
  */
 public class Camera {
     public static final String cameraIP = "10.6.94.12";
-    public static final String imageURL = "/mjpg/video.mjpg";
+    public static final String imageURL = "/axis-cgi/jpg/image.cgi";
+    private InputStream cam;
+    private StringWriter stringWriter;
+    //private Thread camThread;
+    //private MjpegRunner cam;
     //private WPICamera _cam;
     
     public Camera () {
-        //_cam = new WPICamera(cameraIP);
+        try {
+            URL asset = new URL("http://" + cameraIP + imageURL);
+            cam = asset.openStream();
+            stringWriter = new StringWriter(128);
+            //cam = new MjpegRunner(asset);
+            //camThread = new Thread(cam);
+            //camThread.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 
     public WPIColorImage getFrame () {
         try {
-            //return new WPIColorImage(_cam.getImage().getBufferedImage());
-            return new WPIColorImage((BufferedImage) Assets.load("http://" + cameraIP + imageURL));
+            URL asset = new URL("http://" + cameraIP + imageURL);
+            System.out.println(asset);
+            cam = asset.openStream();
+            return new WPIColorImage(ImageIO.read(cam));
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
-    
+
+
+ 
 }
