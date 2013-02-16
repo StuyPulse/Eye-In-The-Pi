@@ -13,6 +13,8 @@ import java.io.*;
 
 import javax.imageio.*;
 import javax.imageio.stream.*;
+import javax.swing.*;
+import java.awt.*;
 
 import edu.wpi.first.wpijavacv.WPICamera;
 import edu.wpi.first.wpijavacv.WPIColorImage;
@@ -49,6 +51,15 @@ public class Camera {
         try {
             URL asset = new URL("http://" + cameraIP + imageURL);
             System.out.println(asset);
+            ImageIcon image0 = new ImageIcon(asset);
+            BufferedImage bi = new BufferedImage(image0.getIconWidth(), image0.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+            System.out.println(bi);
+            Graphics g = bi.createGraphics();
+            image0.paintIcon(null, g, 0, 0);
+            g.dispose();
+            //File outputFile = new File("saved.png");
+            //ImageIO.write(bi, "png", outputFile);
+            //System.exit(0);
             /*cam = asset.openStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(cam));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -56,10 +67,10 @@ public class Camera {
 	    while ((line = reader.readLine()) != null) {
                 baos.write(line.getBytes(), 0, line.getBytes().length);
             }*/
-	    WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
+        //WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
 	    long endTime = System.currentTimeMillis();
 	    System.out.println(endTime-startTime);
-            return wpici;
+        return new WPIColorImage(bi);//wpici;
         } catch (Exception e) {
             e.printStackTrace();
         }
