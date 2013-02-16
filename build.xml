@@ -7,7 +7,7 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="Eye-In-The-Pi" default="default" basedir=".">
+<project xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" basedir="." default="default" name="Eye-In-The-Pi">
     <description>Builds, tests, and runs the project Eye-In-The-Pi.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
@@ -71,4 +71,11 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target depends="init" description="Run a main class." name="run-nocompile">
+        <j2seproject1:java>
+            <customize>
+                <arg line="${application.args}"/>
+            </customize>
+        </j2seproject1:java>
+    </target>
 </project>
