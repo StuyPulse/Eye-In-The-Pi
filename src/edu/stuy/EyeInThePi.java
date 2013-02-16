@@ -113,6 +113,8 @@ public class EyeInThePi {
         // Get the raw IplImages for OpenCV
         IplImage input = DaisyExtensions.getIplImage(rawImage);
 
+	//logFiltered = ImageFilters.logFilter(input);
+
 
         // Convert to HSV color space
         opencv_imgproc.cvCvtColor(input, hsv, opencv_imgproc.CV_BGR2HLS);
@@ -223,17 +225,14 @@ public class EyeInThePi {
 
         if (square != null)
         {
-            double x = square.getX() + (square.getWidth() / 2);
+            int x = square.getX() + (square.getWidth() / 2);
             x = (2 * (x / size.width())) - 1;
-            double y = square.getY() + (square.getHeight() / 2);
+            int y = square.getY() + (square.getHeight() / 2);
             y = -((2 * (y / size.height())) - 1);
 
-            double azimuth = this.boundAngle0to360Degrees(x*kHorizontalFOVDeg/2.0 + heading - kShooterOffsetDeg);
-            double range = (kTopTargetHeightIn-kCameraHeightIn)/Math.tan((y*kVerticalFOVDeg/2.0 + kCameraPitchDeg)*Math.PI/180.0);
-
             // Get the coordinates of the center of the square
-            double squareCenterX = square.getX() + (square.getWidth() / 2);
-            double squareCenterY = square.getY() + (square.getWidth() / 2);
+            int squareCenterX = square.getX() + (square.getWidth() / 2);
+            int squareCenterY = square.getY() + (square.getWidth() / 2);
 
             // Normalize them to be in a coordinate system with the center as (0,0)
             squareCenterX -= (size.width() / 2);
@@ -305,13 +304,13 @@ public class EyeInThePi {
             WPIColorImage rawImage;
             try
             {
+                    long startTime, endTime;
+                    startTime = System.nanoTime();
                 rawImage = cam.getFrame();//new WPIColorImage(ImageIO.read(new File(args[i%args.length])));
                 if (rawImage != null) {
                     WPIImage resultImage;
 
                     // Process image
-                    long startTime, endTime;
-                    startTime = System.nanoTime();
                     resultImage = pieye.processImage(rawImage);
                     endTime = System.nanoTime();
 

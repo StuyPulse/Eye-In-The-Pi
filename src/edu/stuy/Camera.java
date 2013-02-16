@@ -45,11 +45,21 @@ public class Camera {
     
 
     public WPIColorImage getFrame () {
+	long startTime = System.currentTimeMillis();
         try {
             URL asset = new URL("http://" + cameraIP + imageURL);
             System.out.println(asset);
-            cam = asset.openStream();
-            return new WPIColorImage(ImageIO.read(cam));
+            /*cam = asset.openStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(cam));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    String line = "";
+	    while ((line = reader.readLine()) != null) {
+                baos.write(line.getBytes(), 0, line.getBytes().length);
+            }*/
+	    WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
+	    long endTime = System.currentTimeMillis();
+	    System.out.println(endTime-startTime);
+            return wpici;
         } catch (Exception e) {
             e.printStackTrace();
         }
