@@ -15,6 +15,9 @@ import javax.imageio.*;
 import javax.imageio.stream.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.*;
+
+import java.util.Hashtable;
 
 import edu.wpi.first.wpijavacv.WPICamera;
 import edu.wpi.first.wpijavacv.WPIColorImage;
@@ -28,6 +31,7 @@ public class Camera {
     public static final String imageURL = "/axis-cgi/jpg/image.cgi";
     private InputStream cam;
     private StringWriter stringWriter;
+    private BufferedImage cachedImage;
     //private Thread camThread;
     //private MjpegRunner cam;
     //private WPICamera _cam;
@@ -37,6 +41,8 @@ public class Camera {
             URL asset = new URL("http://" + cameraIP + imageURL);
             cam = asset.openStream();
             stringWriter = new StringWriter(128);
+            cachedImage = ImageIO.read(new URL("http://" + cameraIP + imageURL));
+            ImageIO.setUseCache(false);
             //cam = new MjpegRunner(asset);
             //camThread = new Thread(cam);
             //camThread.start();
@@ -53,10 +59,12 @@ public class Camera {
             System.out.println(asset);
             //Image image0 = new ImageIcon(asset).getImage();
             //BufferedImage bi = new BufferedImage(image0.getWidth(null), image0.getHeight(null), BufferedImage.TYPE_INT_RGB);
-            //System.out.println(bi);
+            //BufferedImage bi = new BufferedImage(cachedImage.getWidth(), cachedImage.getHeight(), cachedImage.getType(), model);
+            //BufferedImage bi = new BufferedImage(cachedImage.getColorModel(), (WritableRaster) cachedImage.getData(), false, null);
             //Graphics g = bi.createGraphics();
             //g.drawImage(image0,0,0,null);
             //g.dispose();
+            //System.out.println(bi.getColorModel());
             //File outputFile = new File("saved.jpg");
             //ImageIO.write(bi, "jpg", outputFile);
             //asset = new URL("http://" + cameraIP + imageURL);
@@ -65,9 +73,12 @@ public class Camera {
             //System.exit(0);
             //BufferedImage bi = ImageIO.read(otherOutput);
             //System.out.println(bi);
-            WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
+            BufferedImage imagiobi = ImageIO.read(asset);
+            //System.out.println(imagiobi.getColorModel());
+            WPIColorImage wpici = new WPIColorImage(imagiobi);//new ByteArrayInputStream(baos.toByteArray())));
             long endTime = System.currentTimeMillis();
             System.out.println(endTime-startTime);
+            System.out.println("---------------------");
             return wpici;
             //return new WPIColorImage(bi);
         } catch (Exception e) {
