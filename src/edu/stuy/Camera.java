@@ -19,6 +19,7 @@ import java.awt.*;
 import edu.wpi.first.wpijavacv.WPICamera;
 import edu.wpi.first.wpijavacv.WPIColorImage;
 
+import com.sun.image.codec.jpeg.*;
 /*
  * This class has the responsibility of talking to cameras.
  * A dignified position.
@@ -51,26 +52,27 @@ public class Camera {
         try {
             URL asset = new URL("http://" + cameraIP + imageURL);
             System.out.println(asset);
-            ImageIcon image0 = new ImageIcon(asset);
-            BufferedImage bi = new BufferedImage(image0.getIconWidth(), image0.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-            System.out.println(bi);
-            Graphics g = bi.createGraphics();
-            image0.paintIcon(null, g, 0, 0);
-            g.dispose();
-            //File outputFile = new File("saved.png");
-            //ImageIO.write(bi, "png", outputFile);
+            com.sun.image.codec.jpeg.JPEGImageDecoder jpegDecode = JPEGCodec.createJPEGDecoder(asset.open());
+            BufferedImage bi = jpegDecode.decodeAsBufferedImage();
+            //Image image0 = new ImageIcon(asset).getImage();
+            //BufferedImage bi = new BufferedImage(image0.getWidth(null), image0.getHeight(null), BufferedImage.TYPE_INT_RGB);
+            //System.out.println(bi);
+            //Graphics g = bi.createGraphics();
+            //g.drawImage(image0,0,0,null);
+            //g.dispose();
+            //File outputFile = new File("saved.jpg");
+            //ImageIO.write(bi, "jpg", outputFile);
+            //asset = new URL("http://" + cameraIP + imageURL);
+            //File otherOutput = new File("wpi.jpg");
+            //ImageIO.write(ImageIO.read(asset), "jpg", otherOutput);
             //System.exit(0);
-            /*cam = asset.openStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(cam));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    String line = "";
-	    while ((line = reader.readLine()) != null) {
-                baos.write(line.getBytes(), 0, line.getBytes().length);
-            }*/
-        //WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
-	    long endTime = System.currentTimeMillis();
-	    System.out.println(endTime-startTime);
-        return new WPIColorImage(bi);//wpici;
+            //BufferedImage bi = ImageIO.read(otherOutput);
+            System.out.println(bi);
+            //WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
+            long endTime = System.currentTimeMillis();
+            System.out.println(endTime-startTime);
+            //return wpici;
+            return new WPIColorImage(bi);
         } catch (Exception e) {
             e.printStackTrace();
         }
