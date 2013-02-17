@@ -64,12 +64,12 @@ public class Camera {
             //ImageIO.write(ImageIO.read(asset), "jpg", otherOutput);
             //System.exit(0);
             //BufferedImage bi = ImageIO.read(otherOutput);
-            System.out.println(bi);
+            //System.out.println(bi);
             WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
             long endTime = System.currentTimeMillis();
             System.out.println(endTime-startTime);
-            //return wpici;
-            return new WPIColorImage(bi);
+            return wpici;
+            //return new WPIColorImage(bi);
         } catch (Exception e) {
             e.printStackTrace();
         }
