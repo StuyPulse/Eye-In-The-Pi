@@ -19,7 +19,6 @@ import java.awt.*;
 import edu.wpi.first.wpijavacv.WPICamera;
 import edu.wpi.first.wpijavacv.WPIColorImage;
 
-import com.sun.image.codec.jpeg.*;
 /*
  * This class has the responsibility of talking to cameras.
  * A dignified position.
@@ -52,8 +51,6 @@ public class Camera {
         try {
             URL asset = new URL("http://" + cameraIP + imageURL);
             System.out.println(asset);
-            com.sun.image.codec.jpeg.JPEGImageDecoder jpegDecode = JPEGCodec.createJPEGDecoder(asset.open());
-            BufferedImage bi = jpegDecode.decodeAsBufferedImage();
             //Image image0 = new ImageIcon(asset).getImage();
             //BufferedImage bi = new BufferedImage(image0.getWidth(null), image0.getHeight(null), BufferedImage.TYPE_INT_RGB);
             //System.out.println(bi);
@@ -68,7 +65,7 @@ public class Camera {
             //System.exit(0);
             //BufferedImage bi = ImageIO.read(otherOutput);
             System.out.println(bi);
-            //WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
+            WPIColorImage wpici = new WPIColorImage(ImageIO.read(asset));//new ByteArrayInputStream(baos.toByteArray())));
             long endTime = System.currentTimeMillis();
             System.out.println(endTime-startTime);
             //return wpici;
