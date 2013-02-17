@@ -53,32 +53,10 @@ public class Camera {
     
 
     public WPIColorImage getFrame () {
-	long startTime = System.currentTimeMillis();
         try {
             URL asset = new URL("http://" + cameraIP + imageURL);
-            System.out.println(asset);
-            //Image image0 = new ImageIcon(asset).getImage();
-            //BufferedImage bi = new BufferedImage(image0.getWidth(null), image0.getHeight(null), BufferedImage.TYPE_INT_RGB);
-            //BufferedImage bi = new BufferedImage(cachedImage.getWidth(), cachedImage.getHeight(), cachedImage.getType(), model);
-            //BufferedImage bi = new BufferedImage(cachedImage.getColorModel(), (WritableRaster) cachedImage.getData(), false, null);
-            //Graphics g = bi.createGraphics();
-            //g.drawImage(image0,0,0,null);
-            //g.dispose();
-            //System.out.println(bi.getColorModel());
-            //File outputFile = new File("saved.jpg");
-            //ImageIO.write(bi, "jpg", outputFile);
-            //asset = new URL("http://" + cameraIP + imageURL);
-            //File otherOutput = new File("wpi.jpg");
-            //ImageIO.write(ImageIO.read(asset), "jpg", otherOutput);
-            //System.exit(0);
-            //BufferedImage bi = ImageIO.read(otherOutput);
-            //System.out.println(bi);
             BufferedImage imagiobi = ImageIO.read(asset);
-            //System.out.println(imagiobi.getColorModel());
             WPIColorImage wpici = new WPIColorImage(imagiobi);//new ByteArrayInputStream(baos.toByteArray())));
-            long endTime = System.currentTimeMillis();
-            System.out.println(endTime-startTime);
-            System.out.println("---------------------");
             return wpici;
             //return new WPIColorImage(bi);
         } catch (Exception e) {
