@@ -9,6 +9,7 @@ import com.googlecode.javacv.cpp.opencv_core;
 import com.googlecode.javacv.cpp.opencv_core.*;
 import com.googlecode.javacv.cpp.opencv_imgproc;
 import com.googlecode.javacv.cpp.opencv_imgproc.*;
+import com.googlecode.javacv.cpp.opencv_highgui;
 import edu.wpi.first.wpijavacv.DaisyExtensions;
 import edu.wpi.first.wpijavacv.WPIBinaryImage;
 import edu.wpi.first.wpijavacv.WPIColor;
@@ -22,6 +23,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import javax.imageio.ImageIO;
+
+import javax.swing.JFrame;
+import java.awt.Image;
+
+import java.awt.Checkbox;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Component;
 
 
 /* Much of this code is based on Team 341's DaisyCV code.
@@ -70,6 +79,13 @@ public class EyeInThePi {
     private WPIPoint linePt1;
     private WPIPoint linePt2;
     private int horizontalOffsetPixels;
+
+    
+    private static String[] imgTypes = {"bin", "hsv", "hue", "combined", "sat", "logFiltered", "rawImage"};
+
+    private static Frame f;
+
+    private JFrame window;
     
     public EyeInThePi()
     {
@@ -82,6 +98,8 @@ public class EyeInThePi {
         morphKernel = IplConvKernel.create(3, 3, 1, 1, opencv_imgproc.CV_SHAPE_RECT, null);
 
         //network = new NetworkIO();
+        
+        window = new JFrame();
 
         DaisyExtensions.init();
         
@@ -251,6 +269,16 @@ public class EyeInThePi {
         // Draw a crosshair
         rawImage.drawLine(linePt1, linePt2, targetColor, 2);
 
+        IplImage[] images = {bin, hsv, hue, combined, sat, logFiltered, DaisyExtensions.getIplImage(rawImage)};
+
+        for (int i = 0; i < imgTypes.length; i++) {
+            if (((Checkbox)f.getComponent(i)).getState())
+                opencv_highgui.cvShowImage(imgTypes[i], images[i]);
+            else
+                opencv_highgui.cvDestroyWindow(imgTypes[i]);
+        }
+
+
         DaisyExtensions.releaseMemory();
 
         //System.gc();
@@ -298,6 +326,15 @@ public class EyeInThePi {
         boolean running = true;
         
         long totalTime = 0;
+
+        f = new Frame();
+        f.setVisible(true);
+
+        f.setLayout(new GridLayout(imgTypes.length, 1));
+        for (String s : imgTypes) {
+            f.add(new Checkbox(s));
+        }
+
         
         while (running) {
             // Load the image
@@ -313,6 +350,7 @@ public class EyeInThePi {
                     // Process image
                     resultImage = pieye.processImage(rawImage);
                     endTime = System.nanoTime();
+
 
                     
                     // Display results

@@ -38,10 +38,10 @@ public class Camera {
     
     public Camera () {
         try {
-            URL asset = new URL("http://" + cameraIP + imageURL);
-            cam = asset.openStream();
-            stringWriter = new StringWriter(128);
-            cachedImage = ImageIO.read(new URL("http://" + cameraIP + imageURL));
+            //URL asset = new URL("http://" + cameraIP + imageURL);
+            //cam = asset.openStream();
+            //stringWriter = new StringWriter(128);
+            //cachedImage = ImageIO.read(new URL("http://" + cameraIP + imageURL));
             ImageIO.setUseCache(false);
             //cam = new MjpegRunner(asset);
             //camThread = new Thread(cam);
@@ -54,7 +54,7 @@ public class Camera {
 
     public WPIColorImage getFrame () {
         try {
-            URL asset = new URL("http://" + cameraIP + imageURL);
+            URL asset = new URL("http://i.dailymail.co.uk/i/pix/2013/02/25/article-2284287-184499FD000005DC-943_964x641.jpg");//("http://" + cameraIP + imageURL);
             BufferedImage imagiobi = ImageIO.read(asset);
             WPIColorImage wpici = new WPIColorImage(imagiobi);//new ByteArrayInputStream(baos.toByteArray())));
             return wpici;
